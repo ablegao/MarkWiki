@@ -1,5 +1,6 @@
 
 
+
 #欢迎使用 MarkWiki
 
 这是一个很小的基于静态文件的Wiki程序。
@@ -13,4 +14,4 @@
 
 
 下载地址：
-[https://github.com/ablegao/MarkWiki](http://github.com/ablegao/MarkWiki)
+[https://github.com/ablegao/MarkWiki](http://github.com/ablegao/MarkWiki){:target="_blank"}

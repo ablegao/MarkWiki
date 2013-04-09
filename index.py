@@ -26,7 +26,7 @@ urls = (
 
 class MainHandler:
     def GET(self):
-        fileHeader = open("./index.md" )
+        fileHeader = open("./README.md" )
         html = fileHeader.read()
         html = Header + markdown.markdown(html) + Footer
         return html
