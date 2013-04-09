@@ -4,14 +4,21 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+
 import markdown
 import web
+
+
+sys.path.insert(0,os.path.join(os.path.dirname(__file__) ) )
+PATH = os.path.dirname(__file__)
 
 Header = '''<html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><title> MarkwWike</title></head>
 <style>
 body{margin:30px 100px;}
 </style>
-<body>'''
+<body>
+<p><h1><a href="/">首页</a></h1></p>
+'''
 
 Footer = "</body><p>@copyright ablegao ,Markdown .  MarkwWike</p></html>"
 
@@ -26,7 +33,8 @@ urls = (
 
 class MainHandler:
     def GET(self):
-        fileHeader = open("./README.md" )
+        web.header('Content-Type', 'text/html')
+        fileHeader = open(PATH + "/README.md" )
         html = fileHeader.read()
         html = Header + markdown.markdown(html) + Footer
         return html
@@ -34,18 +42,19 @@ class MainHandler:
 
 class ReadFileHandler:
     def GET(self , url):
-        url = "./"+url
+        web.header('Content-Type', 'text/html')
+        url = PATH+"/"+url
         if False == os.path.exists(url) :
             html =  Header + "什么都没有~" + Footer
             return html
         fileHeader = open(url)
-        html = fileHeader.read()
+        html = fileHeader.read().replace("\n","\n\n")
         html = Header + markdown.markdown(html) + Footer
         return html
 
 class GetStaticFile:
     def GET(self , url):
-        url = "./"+url
+        url = PATH+"/"+url
         if False == os.path.exists(url) :
             html =  Header + "什么都没有~" + Footer
             return html
@@ -55,3 +64,5 @@ class GetStaticFile:
 
 if __name__ == "__main__":
     application = web.application(urls, globals()).run() #wsgifunc()
+else:
+    application = web.application(urls, globals()).wsgifunc()
