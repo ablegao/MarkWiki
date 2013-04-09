@@ -1,4 +1,7 @@
 
+#Golang 手册
+<a href="/gowebbook/preface.md" target=_blank >Golang 手册</a>
+
 
 
 #欢迎使用 MarkWiki
