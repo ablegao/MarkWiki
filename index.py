@@ -1,11 +1,11 @@
 #coding:utf-8
-import tornado.ioloop
-import tornado.web
-import markdown
 import os
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
+
+import markdown
+import web
 
 Header = '''<html><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><title> MarkwWike</title></head>
 <style>
@@ -14,34 +14,44 @@ body{margin:30px 100px;}
 <body>'''
 
 Footer = "</body><p>@copyright ablegao ,Markdown .  MarkwWike</p></html>"
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
 
+
+
+urls = (
+    '/', "MainHandler",
+    '/(.*\.md)', 'ReadFileHandler',
+    '/(.*)' , 'GetStaticFile',
+)
+
+
+class MainHandler:
+    def GET(self):
         fileHeader = open("./index.md" )
         html = fileHeader.read()
         html = Header + markdown.markdown(html) + Footer
-        self.write(html)
+        return html
 
 
-class ReadFileHandler(tornado.web.RequestHandler):
-    def get(self , url):
+class ReadFileHandler:
+    def GET(self , url):
         url = "./"+url
         if False == os.path.exists(url) :
-            self.write(Header)
-            self.write("什么都没有！")
-            self.write(Footer)
-            return
+            html =  Header + "什么都没有~" + Footer
+            return html
         fileHeader = open(url)
         html = fileHeader.read()
         html = Header + markdown.markdown(html) + Footer
-        self.write(html)
+        return html
 
-application = tornado.web.Application([
-    (r"/", MainHandler),
-    (r"/(.*\.md)$" , ReadFileHandler),
-    (r"/(.*)$", tornado.web.StaticFileHandler, dict(path="./")),
-    ])
+class GetStaticFile:
+    def GET(self , url):
+        url = "./"+url
+        if False == os.path.exists(url) :
+            html =  Header + "什么都没有~" + Footer
+            return html
+        fileHeader = open(url)
+        return fileHeader.read()
+
 
 if __name__ == "__main__":
-    application.listen(1111)
-    tornado.ioloop.IOLoop.instance().start()
+    application = web.application(urls, globals()).run() #wsgifunc()
